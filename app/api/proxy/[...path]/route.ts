@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 
 // Forwards browser calls to the Hisaabi backend so the browser never hits CORS.
-const BASE = process.env.BACKEND_URL ?? "https://hisaabi-vtw9k.ondigitalocean.app/api";
+const BASE = process.env.BACKEND_URL!;
 
 // Writes are limited to what the web app needs, so the proxy can never be used to hit e.g. account deletion.
 const WRITES = new Set(["POST /auth/login", "POST /ai-assistant/chat", "PUT /user/settings", "PUT /user/profile"]);

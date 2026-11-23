@@ -7,8 +7,8 @@ import { Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
 import { useMushafMarks } from "@/lib/mushafMarks";
 import { loadBsml, loadPageFont, familyFor, type MushafPage } from "@/lib/mushaf";
 
-const QURAN_API = process.env.NEXT_PUBLIC_QURAN_API_URL ?? "https://api.quran.com/api/v4";
-const RECITER = process.env.NEXT_PUBLIC_QURAN_RECITER_ID ?? "7"; // 7 = Mishary Alafasy
+const QURAN_API = process.env.NEXT_PUBLIC_QURAN_API_URL;
+const RECITER = process.env.NEXT_PUBLIC_QURAN_RECITER_ID;
 
 type Surah = { id: number; nameMal: string; startPage: number };
 type State = { page: number; data?: MushafPage; fontOk?: boolean };

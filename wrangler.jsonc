@@ -5,16 +5,5 @@
   "compatibility_date": "2026-11-01",
   "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
   "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
-  "vars": {
-      "BACKEND_URL": "https://hisaabi-vtw9k.ondigitalocean.app/api",
-      "NEXT_PUBLIC_UPLOADS_URL": "https://hisaabi-vtw9k.ondigitalocean.app/uploads/banners",
-      "NEXT_PUBLIC_FIREBASE_API_KEY": "AIzaSyD9iOq_5UHq56YzoyIuftoTbNrieWK5WBs",
-      "NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN": "hisabi-11772.firebaseapp.com",
-      "NEXT_PUBLIC_FIREBASE_PROJECT_ID": "hisabi-11772",
-      "MUSHAF_FONT_PACK_URL": "http://lalithasaram.net/downloads/qfonts/",
-      "NEXT_PUBLIC_QURAN_API_URL": "https://api.quran.com/api/v4",
-      "NEXT_PUBLIC_QURAN_RECITER_ID": "7",
-      "COMMON_EMAIL_BASE_URL": "https://cenloginbackend.d4dx.co/api/common-email"
-  },
   "observability": { "enabled": true }
 }

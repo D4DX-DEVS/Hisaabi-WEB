@@ -4,7 +4,7 @@ import zips from "@/lib/fontZips.json";
 
 // Page fonts come from the same font packs the mobile app downloads (2 pages per zip).
 // Each pack is fetched once, unzipped, and every font in it is stored in the edge cache (works on Cloudflare Workers).
-const PACK_BASE = process.env.MUSHAF_FONT_PACK_URL ?? "http://lalithasaram.net/downloads/qfonts/";
+const PACK_BASE = process.env.MUSHAF_FONT_PACK_URL!;
 const FONT_HEADERS = { "Content-Type": "font/ttf", "Cache-Control": "public, max-age=31536000, immutable" };
 const inflight = new Map<string, Promise<Record<string, Uint8Array>>>();
 
