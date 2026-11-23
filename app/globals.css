@@ -238,3 +238,23 @@ input[type="range"], input[type="checkbox"] { accent-color: var(--lime); }
 .preview { padding: 14px 16px; border: 1px dashed var(--hair); border-radius: 12px; }
 
 .card > * { min-width: 0; }
+
+/* ---------- phone polish ---------- */
+@media (max-width: 560px) {
+  /* picture tiles: two to a row and squarer, so a screen shows several sections instead of one */
+  .grid:has(> .tile) { grid-template-columns: repeat(2, minmax(0, 1fr)) !important; gap: 10px; }
+  .grid > .tile { aspect-ratio: 1 / 1 !important; border-radius: 16px; }
+  .grid > .tile.wide { grid-column: span 2; aspect-ratio: 2 / 1 !important; }
+  .tile-label { padding: 12px 12px; }
+  .tile-label .display { font-size: 1.02rem; }
+  .tile-label small { font-size: 0.72rem; }
+  /* page banner takes less of the first screen */
+  .banner { min-height: 104px; margin-bottom: 20px; }
+  .banner-text { padding: 16px 20px; }
+  .sub { margin-bottom: 22px; }
+  .card { padding: 20px; }
+}
+@media (max-width: 860px) {
+  .langs button { min-height: 44px; }
+  .content-bar .label { font-size: 0.8rem; }
+}

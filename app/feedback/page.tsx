@@ -73,7 +73,7 @@ export default function Feedback() {
             <fieldset style={{ border: 0, padding: 0 }}>
               <legend className="muted" style={{ fontSize: ".85rem", marginBottom: 6 }}>Rating</legend>
               <div style={{ display: "flex", gap: 6 }} role="radiogroup" aria-label="Rating">
-                {[1, 2, 3, 4, 5].map((n) => <button type="button" key={n} role="radio" aria-checked={stars === n} aria-label={`${n} star${n > 1 ? "s" : ""}`} onClick={() => setStars(n)} style={{ background: "none", border: 0, cursor: "pointer" }}><Star size={28} color="var(--gold)" fill={n <= stars ? "var(--gold)" : "none"} /></button>)}
+                {[1, 2, 3, 4, 5].map((n) => <button type="button" key={n} role="radio" aria-checked={stars === n} aria-label={`${n} star${n > 1 ? "s" : ""}`} onClick={() => setStars(n)} style={{ background: "none", border: 0, cursor: "pointer", minWidth: 44, minHeight: 44, display: "grid", placeItems: "center" }}><Star size={28} color="var(--gold)" fill={n <= stars ? "var(--gold)" : "none"} /></button>)}
               </div>
             </fieldset>
             <label>Your feedback<textarea className="inp" name="message" rows={5} required maxLength={4000} /></label>

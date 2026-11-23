@@ -28,7 +28,7 @@ export default function Mecca() {
           {id
             ? <iframe title={cur.title} src={`https://www.youtube.com/embed/${id}`} allow="autoplay; encrypted-media; picture-in-picture" allowFullScreen style={{ width: "100%", aspectRatio: "16/9", border: 0, borderRadius: 14 }} />
             : null}
-          <a className="muted" href={cur.link} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 8 }}>Not playing? Open on YouTube ↗</a>
+          <a className="muted" href={cur.link} target="_blank" rel="noreferrer" style={{ display: "inline-block", marginTop: 4, padding: "10px 0" }}>Not playing? Open on YouTube ↗</a>
         </div>
       )}
       <div className="grid">
