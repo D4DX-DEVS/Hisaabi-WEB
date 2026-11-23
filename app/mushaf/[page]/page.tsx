@@ -3,6 +3,7 @@ import Title from "@/components/Title";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { Bookmark, ChevronLeft, ChevronRight } from "lucide-react";
 import { useMushafMarks } from "@/lib/mushafMarks";
 import { loadBsml, loadPageFont, familyFor, type MushafPage } from "@/lib/mushaf";
@@ -10,8 +11,11 @@ import { loadBsml, loadPageFont, familyFor, type MushafPage } from "@/lib/mushaf
 const QURAN_API = process.env.NEXT_PUBLIC_QURAN_API_URL;
 const RECITER = process.env.NEXT_PUBLIC_QURAN_RECITER_ID;
 
+// the page template remounts this screen on every navigation, so the last page shown lives outside it
+let shown = 0;
+
 type Surah = { id: number; nameMal: string; startPage: number };
-type State = { page: number; data?: MushafPage; fontOk?: boolean };
+type State = { page: number; data?: MushafPage; fontOk?: boolean; dir: 1 | 0 | -1 };
 
 export default function MushafReader() {
   const n = Math.min(604, Math.max(1, Number(useParams<{ page: string }>().page) || 1));
@@ -30,7 +34,8 @@ export default function MushafReader() {
       const data: MushafPage = await (await fetch(`/data/mushaf/${n}.json`)).json();
       let fontOk = true;
       try { await Promise.all([loadBsml(), loadPageFont(n)]); } catch { fontOk = false; }
-      if (live) setSt({ page: n, data, fontOk });
+      // turning forward slides in from the left, since the Quran reads right to left
+      if (live) { const dir = !shown ? 0 : n > shown ? -1 : 1; shown = n; setSt({ page: n, data, fontOk, dir }); }
     })();
     // warm the next page's font so turning the page is instant
     if (n < 604) loadPageFont(n + 1).catch(() => {});
@@ -77,7 +82,7 @@ export default function MushafReader() {
             <option value="">Go to surah</option>
             {surahs.map((s) => <option key={s.id} value={s.id}>{s.id}. {s.nameMal}</option>)}
           </select>
-          <button type="button" className={"btn" + (marked ? "" : " ghost")} aria-pressed={marked} onClick={() => toggle(n)}><Bookmark size={16} fill={marked ? "currentColor" : "none"} /> {marked ? "Bookmarked" : "Bookmark"}</button>
+          <button type="button" className={"btn" + (marked ? "" : " ghost")} aria-pressed={marked} onClick={() => toggle(n)}><Bookmark size={16} fill={marked ? "currentColor" : "none"} /> <span className="bm-label">{marked ? "Bookmarked" : "Bookmark"}</span></button>
           {marks.length > 0 && (
             <select className="inp" aria-label="Bookmarked pages" value="" onChange={(e) => e.target.value && router.push(`/mushaf/${e.target.value}`)}>
               <option value="">Bookmarks ({marks.length})</option>
@@ -92,7 +97,7 @@ export default function MushafReader() {
 
       {audio && <audio controls src={audio} aria-label="Recitation of this surah" style={{ marginBottom: 16 }} />}
 
-      <div className="mushaf" style={{ containerType: "inline-size" }}>
+      <motion.div key={ready ? `p${n}` : "loading"} className="mushaf" style={{ containerType: "inline-size" }} initial={{ opacity: 0, x: ready ? ready.dir * 36 : 0 }} animate={{ opacity: 1, x: 0 }} transition={{ duration: 0.5, ease: [0.22, 1, 0.36, 1] }}>
         {!ready && <p className="muted" style={{ textAlign: "center", padding: 60 }}>Loading page {n}…</p>}
         {ready && !ready.fontOk && (
           <p style={{ textAlign: "center", padding: 40 }}>
@@ -111,7 +116,7 @@ export default function MushafReader() {
             </div>
           );
         })}
-      </div>
+      </motion.div>
 
       <div className="row" style={{ marginTop: 20 }}>
         <Link className={"btn ghost" + (n >= 604 ? " off" : "")} href={`/mushaf/${Math.min(604, n + 1)}`} aria-label="Next page"><ChevronLeft size={16} /> Next</Link>

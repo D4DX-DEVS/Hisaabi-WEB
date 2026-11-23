@@ -1,6 +1,7 @@
 "use client";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 import { MapPin } from "lucide-react";
 import SunDial from "@/components/SunDial";
 import ImageTile from "@/components/ImageTile";
@@ -11,7 +12,13 @@ import { dayView, usePrayerSettings } from "@/lib/prayer";
 
 const hijri = (d: Date) => new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }).format(d);
 
+// the entrance plays once per browser session, so coming back to Home is instant
+const introSeen = () => { try { return sessionStorage.getItem("hisaabi.intro") === "1"; } catch { return true; } };
+const GREETING = "Assalamu alaikum";
+
 export default function Home() {
+  const [intro] = useState(() => !introSeen());
+  useEffect(() => { try { sessionStorage.setItem("hisaabi.intro", "1"); } catch {} }, []);
   const { s, loc, err } = usePrayerSettings();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t); }, []);
@@ -24,14 +31,16 @@ export default function Home() {
         <div>
           <p className="muted" style={{ marginBottom: 14 }}>{now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
           <h1 className="display" style={{ fontSize: "clamp(2.2rem, 4.6vw, 3.8rem)", lineHeight: 1.05, color: "var(--ivory)" }}>
-            Assalamu alaikum
+            {intro ? Array.from(GREETING).map((ch, i) => (
+              <motion.span key={i} style={{ display: "inline-block", whiteSpace: "pre" }} initial={{ opacity: 0, y: "0.35em", filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ delay: 0.15 + i * 0.045, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>{ch}</motion.span>
+            )) : GREETING}
           </h1>
           <p className="ar" style={{ fontSize: "1.9rem", color: "var(--gold)", marginTop: 22, textAlign: "left" }}>إِنَّ مَعَ الْعُسْرِ يُسْرًا</p>
           <p className="muted" style={{ maxWidth: "36ch" }}>Indeed, with hardship comes ease. Quran 94:6</p>
           {loc && <p className="muted" style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 8, fontSize: ".85rem" }}><MapPin size={14} /> {loc.lat.toFixed(2)}, {loc.lon.toFixed(2)}</p>}
         </div>
         <div style={{ display: "grid", placeItems: "center" }}>
-          {v ? <SunDial times={v.times} now={now} next={v.next} remaining={v.remaining} /> : (
+          {v ? <SunDial times={v.times} now={now} next={v.next} remaining={v.remaining} delay={intro ? 0.9 : 0} /> : (
             <Link href="/prayer" className="card" style={{ textAlign: "center", maxWidth: 320 }}>
               <b className="display" style={{ fontSize: "1.5rem" }}>See today&apos;s prayer times</b>
               <p className="muted" style={{ marginTop: 6 }}>{err || "Allow location, or enter coordinates."}</p>
@@ -43,8 +52,8 @@ export default function Home() {
       <Banner />
 
       <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}>
-        {tiles.map(([href, , label]) => (
-          <ImageTile key={href} href={href} title={label} {...SECTION_SCENE[href]} />
+        {tiles.map(([href, , label], i) => (
+          <ImageTile key={href} href={href} title={label} {...SECTION_SCENE[href]} enterDelay={intro ? 2.2 + Math.min(i, 11) * 0.06 : undefined} />
         ))}
       </div>
     </>

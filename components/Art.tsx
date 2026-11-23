@@ -5,7 +5,7 @@ export type Scene = "mosque" | "lantern" | "beads" | "kaaba" | "book" | "dates" 
 const L = "#a6c420", LL = "#cfe65e", S = "#ffd369", D = "#14232a";
 
 const Stars = () => (
-  <g fill={LL} opacity=".7">
+  <g fill={LL} opacity=".7" className="art-stars">
     {[[40, 40, 2], [120, 25, 1.4], [330, 50, 2], [280, 22, 1.4], [70, 100, 1.2], [360, 110, 1.4], [210, 40, 1.2]].map(([x, y, r], i) => <circle key={i} cx={x} cy={y} r={r} />)}
   </g>
 );

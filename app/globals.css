@@ -258,3 +258,32 @@ input[type="range"], input[type="checkbox"] { accent-color: var(--lime); }
   .langs button { min-height: 44px; }
   .content-bar .label { font-size: 0.8rem; }
 }
+
+/* ---------- motion ---------- */
+/* last ten minutes before the adhan: the countdown and the sun breathe */
+.count-soon { animation: soon-glow 2.6s ease-in-out infinite; }
+@keyframes soon-glow { 0%, 100% { text-shadow: 0 0 0 rgba(255, 211, 105, 0); } 50% { text-shadow: 0 0 22px rgba(255, 211, 105, 0.65); } }
+.sun-halo { transform-box: fill-box; transform-origin: center; animation: halo-breathe 2.6s ease-in-out infinite; }
+@keyframes halo-breathe { 0%, 100% { transform: scale(1); opacity: 0.8; } 50% { transform: scale(1.5); opacity: 1; } }
+
+/* picture tiles: stars drift slowly; the art moves a little against the scroll where the browser supports it */
+.art-stars { animation: stars-drift 11s ease-in-out infinite alternate; }
+@keyframes stars-drift { from { transform: translateY(0); opacity: 0.55; } to { transform: translateY(-7px); opacity: 0.95; } }
+@supports (animation-timeline: view()) {
+  .tile > svg { transform: scale(1.14); animation: tile-parallax linear both; animation-timeline: view(); animation-range: cover 0% cover 100%; }
+  @keyframes tile-parallax { from { transform: scale(1.14) translateY(-3.5%); } to { transform: scale(1.14) translateY(3.5%); } }
+}
+@media (prefers-reduced-motion: reduce) {
+  .art-stars, .count-soon, .sun-halo { animation: none !important; }
+  .tile > svg { animation: none !important; transform: none !important; }
+}
+
+/* ---------- mushaf, phone ---------- */
+@media (max-width: 860px) {
+  .mushaf-tools { display: grid; grid-template-columns: 1fr auto 84px; gap: 8px; }
+  .mushaf-tools select.inp { width: 100%; min-width: 0; }
+  .mushaf-tools .page-jump { width: 100%; flex: none; }
+  .mushaf-tools .bm-label { display: none; }
+  .mushaf-tools > select[aria-label="Bookmarked pages"] { grid-column: 1 / -1; }
+  audio { height: 40px; margin-bottom: 12px; }
+}

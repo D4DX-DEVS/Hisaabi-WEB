@@ -7,7 +7,7 @@ type T = { name: string; at: Date };
 const START = 150, SWEEP = 240;
 const pt = (cx: number, cy: number, r: number, deg: number) => [cx + r * Math.cos((deg * Math.PI) / 180), cy + r * Math.sin((deg * Math.PI) / 180)];
 
-export default function SunDial({ times, now, next, remaining, size = 380 }: { times: T[]; now: Date; next: string | null; remaining: string; size?: number }) {
+export default function SunDial({ times, now, next, remaining, size = 380, delay = 0 }: { times: T[]; now: Date; next: string | null; remaining: string; size?: number; delay?: number }) {
   const c = size / 2, r = size / 2 - 58;
   const t0 = times[0].at.getTime(), t1 = times[times.length - 1].at.getTime();
   const frac = (d: Date) => Math.min(1, Math.max(0, (d.getTime() - t0) / (t1 - t0)));
@@ -15,6 +15,7 @@ export default function SunDial({ times, now, next, remaining, size = 380 }: { t
   const [x0, y0] = pos(0), [x1, y1] = pos(1);
   const arc = `M ${x0} ${y0} A ${r} ${r} 0 1 1 ${x1} ${y1}`;
   const f = frac(now);
+  const soon = !!next && remaining < "00:10:00"; // the last ten minutes before the adhan
   const [sx, sy] = pos(f);
   return (
     <div style={{ width: "100%", maxWidth: size, aspectRatio: "1", position: "relative" }}>
@@ -25,7 +26,7 @@ export default function SunDial({ times, now, next, remaining, size = 380 }: { t
         </defs>
         <circle cx={c} cy={c} r={r - 26} fill="none" stroke="rgba(166,196,32,0.08)" strokeDasharray="2 7" />
         <path d={arc} fill="none" stroke="rgba(166,196,32,0.14)" strokeWidth="2" />
-        <motion.path d={arc} fill="none" stroke="url(#gold)" strokeWidth="3.5" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: f }} transition={{ duration: 2.2, ease: [0.22, 1, 0.36, 1] }} />
+        <motion.path d={arc} fill="none" stroke="url(#gold)" strokeWidth="3.5" strokeLinecap="round" initial={{ pathLength: 0 }} animate={{ pathLength: f }} transition={{ delay, duration: 2.2, ease: [0.22, 1, 0.36, 1] }} />
         {times.map((t) => {
           const [mx, my] = pos(frac(t.at));
           const [lx, ly] = pt(c, c, r + 30, START + SWEEP * frac(t.at));
@@ -45,7 +46,7 @@ export default function SunDial({ times, now, next, remaining, size = 380 }: { t
       <div style={{ position: "absolute", inset: 0, display: "grid", placeItems: "center", textAlign: "center", pointerEvents: "none" }}>
         <div>
           <div className="muted" style={{ fontSize: ".8rem", letterSpacing: ".14em" }}>{next ? `NEXT · ${next.toUpperCase()}` : "TODAY"}</div>
-          <div className="display" style={{ fontSize: "clamp(2rem, 5.5vw, 3rem)", color: "var(--ivory)", fontVariantNumeric: "lining-nums tabular-nums", lineHeight: 1.1 }}>{next ? remaining : "Done"}</div>
+          <div className={"display" + (soon ? " count-soon" : "")} style={{ fontSize: "clamp(2rem, 5.5vw, 3rem)", color: "var(--ivory)", fontVariantNumeric: "lining-nums tabular-nums", lineHeight: 1.1 }}>{next ? remaining : "Done"}</div>
           <div className="muted" style={{ fontSize: ".8rem" }}>{next ? "until the adhan" : "all prayers prayed"}</div>
         </div>
       </div>
