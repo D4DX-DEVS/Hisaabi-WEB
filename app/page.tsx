@@ -51,7 +51,17 @@ export default function Home() {
 
       <Banner />
 
-      <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}>
+      {/* phones: small icon cards, three across, like the app's More screen */}
+      <div className="icon-grid">
+        {tiles.map(([href, Icon, label], i) => (
+          <Link key={href} href={href} className="icon-card" style={intro ? { animation: `icon-rise 0.7s var(--ease) ${2.1 + Math.min(i, 14) * 0.04}s both` } : undefined}>
+            <span className="icon-box"><Icon size={24} strokeWidth={1.6} /></span>
+            <span className="icon-label">{label}</span>
+          </Link>
+        ))}
+      </div>
+
+      <div className="grid tiles-desktop" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}>
         {tiles.map(([href, , label], i) => (
           <ImageTile key={href} href={href} title={label} {...SECTION_SCENE[href]} enterDelay={intro ? 2.2 + Math.min(i, 11) * 0.06 : undefined} />
         ))}
