@@ -1,69 +1,52 @@
-import Image from "next/image";
+"use client";
+import Link from "next/link";
+import { useEffect, useState } from "react";
+import { MapPin } from "lucide-react";
+import SunDial from "@/components/SunDial";
+import ImageTile from "@/components/ImageTile";
+import Banner from "@/components/Banner";
+import { SECTION_SCENE } from "@/lib/images";
+import { GROUPS } from "@/components/Shell";
+import { dayView, usePrayerSettings } from "@/lib/prayer";
+
+const hijri = (d: Date) => new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }).format(d);
 
 export default function Home() {
+  const { s, loc, err } = usePrayerSettings();
+  const [now, setNow] = useState(() => new Date());
+  useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t); }, []);
+  const v = loc ? dayView(loc, s, now) : null;
+  const tiles = GROUPS.flatMap((g) => g.items).filter(([h]) => SECTION_SCENE[h] && h !== "/saved");
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert h-5 w-[100px]"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the{" "}
-            <code className="rounded bg-black/[.06] px-1.5 py-0.5 font-mono text-[0.9em] dark:bg-white/[.08]">
-              page.tsx
-            </code>{" "}
-            file.
+    <>
+      <section style={{ display: "grid", gap: 40, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", alignItems: "center", marginBottom: 56 }}>
+        <div>
+          <p className="muted" style={{ marginBottom: 14 }}>{now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
+          <h1 className="display" style={{ fontSize: "clamp(2.4rem, 5vw, 3.8rem)", lineHeight: 1.02, color: "var(--ivory)" }}>
+            Assalamu<br />alaikum
           </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+          <p className="ar" style={{ fontSize: "1.9rem", color: "var(--gold)", marginTop: 22, textAlign: "left" }}>إِنَّ مَعَ الْعُسْرِ يُسْرًا</p>
+          <p className="muted" style={{ maxWidth: "36ch" }}>Indeed, with hardship comes ease. Quran 94:6</p>
+          {loc && <p className="muted" style={{ marginTop: 26, display: "flex", alignItems: "center", gap: 8, fontSize: ".85rem" }}><MapPin size={14} /> {loc.lat.toFixed(2)}, {loc.lon.toFixed(2)}</p>}
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert h-[14px] w-4"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+        <div style={{ display: "grid", placeItems: "center" }}>
+          {v ? <SunDial times={v.times} now={now} next={v.next} remaining={v.remaining} /> : (
+            <Link href="/prayer" className="card" style={{ textAlign: "center", maxWidth: 320 }}>
+              <b className="display" style={{ fontSize: "1.5rem" }}>See today&apos;s prayer times</b>
+              <p className="muted" style={{ marginTop: 6 }}>{err || "Allow location, or enter coordinates."}</p>
+            </Link>
+          )}
         </div>
-      </main>
-    </div>
+      </section>
+
+      <Banner />
+
+      <div className="grid" style={{ gridTemplateColumns: "repeat(auto-fill, minmax(230px, 1fr))" }}>
+        {tiles.map(([href, , label]) => (
+          <ImageTile key={href} href={href} title={label} {...SECTION_SCENE[href]} />
+        ))}
+      </div>
+    </>
   );
 }
