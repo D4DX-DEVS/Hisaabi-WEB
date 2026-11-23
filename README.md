@@ -18,7 +18,6 @@ All settings live in `.env` in the project root (git-ignored). The file is comme
 | `BACKEND_URL` | Hisaabi API, reached through the `/api/proxy` route (avoids browser CORS) |
 | `NEXT_PUBLIC_UPLOADS_URL` | Where the backend serves banner images and videos |
 | `NEXT_PUBLIC_FIREBASE_API_KEY`, `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN`, `NEXT_PUBLIC_FIREBASE_PROJECT_ID` | Firebase web sign-in, same project as the mobile app |
-| `MUSHAF_FONT_PACK_URL`, `MUSHAF_FONT_CACHE_DIR` | Source and cache folder for Mushaf page fonts |
 | `NEXT_PUBLIC_QURAN_API_URL`, `NEXT_PUBLIC_QURAN_RECITER_ID` | Quran recitation audio |
 | `COMMON_EMAIL_BASE_URL`, `COMMON_EMAIL_API_KEY` | Feedback and feature-request email (secret) |
 

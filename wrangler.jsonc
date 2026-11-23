@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "hisaabi-web",
+  "main": ".open-next/worker.js",
+  "compatibility_date": "2026-11-01",
+  "compatibility_flags": ["nodejs_compat", "global_fetch_strictly_public"],
+  "assets": { "directory": ".open-next/assets", "binding": "ASSETS" },
+  "vars": {
+    "BACKEND_URL": "https://hisaabi-vtw9k.ondigitalocean.app/api",
+    "MUSHAF_FONT_PACK_URL": "http://lalithasaram.net/downloads/qfonts/",
+    "COMMON_EMAIL_BASE_URL": "https://cenloginbackend.d4dx.co/api/common-email"
+  },
+  "observability": { "enabled": true }
+}

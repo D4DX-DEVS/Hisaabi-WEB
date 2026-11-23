@@ -1,13 +1,10 @@
 import { NextRequest } from "next/server";
-import { promises as fs } from "fs";
-import os from "os";
-import path from "path";
 import { unzipSync } from "fflate";
+import zips from "@/lib/fontZips.json";
 
 // Page fonts come from the same font packs the mobile app downloads (2 pages per zip).
-// They are fetched once, extracted, cached on disk, and served from our own origin.
+// Each pack is fetched once, unzipped, and every font in it is stored in the edge cache (works on Cloudflare Workers).
 const PACK_BASE = process.env.MUSHAF_FONT_PACK_URL ?? "http://lalithasaram.net/downloads/qfonts/";
-const CACHE = process.env.MUSHAF_FONT_CACHE_DIR || path.join(os.tmpdir(), "hisaabi-mushaf-fonts");
 const FONT_HEADERS = { "Content-Type": "font/ttf", "Cache-Control": "public, max-age=31536000, immutable" };
 const inflight = new Map<string, Promise<Record<string, Uint8Array>>>();
 
@@ -27,21 +24,26 @@ async function packFonts(zip: string) {
   return job;
 }
 
+// the Cache API exists on Workers; locally (next dev) it may not, so caching is skipped there
+const edge = () => (typeof caches !== "undefined" ? (caches as unknown as { default?: Cache }).default : undefined);
+const keyFor = (req: NextRequest, name: string) => new Request(new URL(`/__fontcache/${name}`, req.nextUrl.origin));
+
 export async function GET(req: NextRequest) {
   const n = Number(req.nextUrl.pathname.split("/").pop());
   if (!Number.isInteger(n) || n < 3 || n > 604) return new Response("Not found", { status: 404 });
+  const zip = (zips as Record<string, string>)[n];
+  if (!/^f\d+$/.test(zip ?? "") || zip === "f0") return new Response("No font pack for this page", { status: 404 });
+
   const name = `QCF_P${String(n).padStart(3, "0")}.TTF`;
-  const cached = path.join(CACHE, name);
-  try { return new Response(new Uint8Array(await fs.readFile(cached)), { headers: FONT_HEADERS }); } catch {}
+  const cache = edge();
+  const hit = await cache?.match(keyFor(req, name));
+  if (hit) return hit;
 
   try {
-    const meta = JSON.parse(await fs.readFile(path.join(process.cwd(), "public", "data", "mushaf", `${n}.json`), "utf8"));
-    if (!/^f\d+$/.test(meta.zip) || meta.zip === "f0") return new Response("No font pack for this page", { status: 404 });
-    const fonts = await packFonts(meta.zip);
-    await fs.mkdir(CACHE, { recursive: true });
-    for (const [fname, data] of Object.entries(fonts)) await fs.writeFile(path.join(CACHE, fname), data).catch(() => {});
+    const fonts = await packFonts(zip);
     const data = fonts[name];
     if (!data) return new Response("Font missing from pack", { status: 404 });
+    if (cache) await Promise.all(Object.entries(fonts).map(([fname, d]) => cache.put(keyFor(req, fname), new Response(new Uint8Array(d), { headers: FONT_HEADERS })).catch(() => {})));
     return new Response(new Uint8Array(data), { headers: FONT_HEADERS });
   } catch {
     return new Response("Font pack unavailable", { status: 502 });
