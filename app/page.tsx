@@ -23,8 +23,8 @@ export default function Home() {
       <section style={{ display: "grid", gap: 40, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", alignItems: "center", marginBottom: 56 }}>
         <div>
           <p className="muted" style={{ marginBottom: 14 }}>{now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
-          <h1 className="display" style={{ fontSize: "clamp(2.4rem, 5vw, 3.8rem)", lineHeight: 1.02, color: "var(--ivory)" }}>
-            Assalamu<br />alaikum
+          <h1 className="display" style={{ fontSize: "clamp(2.2rem, 4.6vw, 3.8rem)", lineHeight: 1.05, color: "var(--ivory)" }}>
+            Assalamu alaikum
           </h1>
           <p className="ar" style={{ fontSize: "1.9rem", color: "var(--gold)", marginTop: 22, textAlign: "left" }}>إِنَّ مَعَ الْعُسْرِ يُسْرًا</p>
           <p className="muted" style={{ maxWidth: "36ch" }}>Indeed, with hardship comes ease. Quran 94:6</p>
