@@ -7,8 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "preview": "opennextjs-cloudflare build && opennextjs-cloudflare preview",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "preview": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\" && opennextjs-cloudflare build && opennextjs-cloudflare preview",
+    "deploy": "node -e \"require('fs').rmSync('.next',{recursive:true,force:true})\" && opennextjs-cloudflare build && opennextjs-cloudflare deploy"
   },
   "dependencies": {
     "adhan": "^4.4.6",
