@@ -2,10 +2,12 @@
 import { useEffect, useState } from "react";
 import PageHead from "@/components/PageHead";
 import SunDial from "@/components/SunDial";
+import { alertsSupported, useAlerts } from "@/lib/notify";
 import { METHODS, dayView, fmt, usePrayerSettings } from "@/lib/prayer";
 
 export default function Prayer() {
   const { s, update, loc, setLoc, err } = usePrayerSettings();
+  const alerts = useAlerts();
   const [now, setNow] = useState(() => new Date());
   useEffect(() => { const t = setInterval(() => setNow(new Date()), 1000); return () => clearInterval(t); }, []);
 
@@ -13,7 +15,7 @@ export default function Prayer() {
     <>
       <PageHead scene="mosque" title="Prayer times" sub={err || "Finding your location…"} />
       {err && (
-        <form className="card" style={{ display: "grid", gap: 12, maxWidth: 380 }}
+        <form className="card" style={{ display: "grid", gap: 12, maxWidth: 380, margin: "0 auto" }}
           onSubmit={(e) => { e.preventDefault(); const f = new FormData(e.currentTarget); const lat = Number(f.get("lat")), lon = Number(f.get("lon")); if (Math.abs(lat) <= 90 && Math.abs(lon) <= 180) setLoc({ lat, lon }); }}>
           <b className="display" style={{ fontSize: "1.3rem" }}>Enter coordinates</b>
           <input className="inp" name="lat" type="number" step="any" placeholder="Latitude, for example 11.25" required />
@@ -34,6 +36,12 @@ export default function Prayer() {
         <div>
           {rows.map(([n, d]) => <div key={n} className={"pr" + (n === v.next ? " on" : "")}><span>{n}</span><span>{fmt(d)}</span></div>)}
           <div style={{ display: "grid", gap: 14, marginTop: 22 }}>
+            {alertsSupported() && (
+              <div>
+                <button type="button" className={"btn" + (alerts.on ? "" : " ghost")} aria-pressed={alerts.on} onClick={alerts.toggle}>{alerts.on ? "Prayer reminders on" : "Turn on prayer reminders"}</button>
+                <p className="muted" style={{ fontSize: ".8rem", marginTop: 6 }}>{alerts.msg || "A notification at each prayer time while Hisaabi is open in your browser or installed as an app."}</p>
+              </div>
+            )}
             <label>Calculation method
               <select className="inp" value={s.method} onChange={(e) => update({ ...s, method: e.target.value as typeof s.method })}>
                 {METHODS.map((m) => <option key={m}>{m}</option>)}

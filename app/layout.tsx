@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Cormorant_Garamond, Manrope, Noto_Sans_Malayalam, Noto_Nastaliq_Urdu, Noto_Naskh_Arabic, Lateef } from "next/font/google";
 import "./globals.css";
 import Shell from "@/components/Shell";
@@ -16,8 +16,11 @@ const ml = Noto_Sans_Malayalam({ subsets: ["malayalam"], weight: ["400", "500", 
 export const metadata: Metadata = {
   title: "Hisaabi",
   description: "Your all-in-one Muslim companion",
-  icons: { icon: "/img/hisaabi_round.png" },
+  icons: { icon: "/img/hisaabi_round.png", apple: "/icons/apple-touch-icon.png" },
+  appleWebApp: { capable: true, title: "Hisaabi", statusBarStyle: "black-translucent" },
 };
+
+export const viewport: Viewport = { themeColor: "#1a2a32" };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (

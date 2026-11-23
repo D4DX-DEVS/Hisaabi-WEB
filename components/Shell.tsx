@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, Suspense, useEffect, useState, useSyncExternalStore } from "react";
+import PwaBoot from "./PwaBoot";
 import { MotionConfig, motion } from "framer-motion";
 import {
   Bot, BookOpen, BookText, Flower2, Lightbulb, Calculator, CalendarDays, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Info, Mail, ShieldCheck, Video, HandHeart, LayoutGrid, X,
@@ -115,6 +116,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             {mounted ? children : null}
           </div>
         </main>
+        {mounted && <PwaBoot />}
         {mounted && <Suspense fallback={null}><TabBar /></Suspense>}
       </div>
     </MotionConfig>
