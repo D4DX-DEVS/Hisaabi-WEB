@@ -30,7 +30,7 @@ export default function Home() {
       <section style={{ display: "grid", gap: 40, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", alignItems: "center", marginBottom: 56 }}>
         <div>
           <p className="muted" style={{ marginBottom: 14 }}>{now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
-          <h1 className="display" style={{ fontSize: "clamp(1.8rem, 3.4vw, 3.2rem)", lineHeight: 1.05, whiteSpace: "nowrap", color: "var(--ivory)" }}>
+          <h1 className="display" style={{ fontSize: "clamp(2.2rem, 4.6vw, 3.8rem)", lineHeight: 1.05, whiteSpace: "nowrap", color: "var(--ivory)" }}>
             {intro ? Array.from(GREETING).map((ch, i) => (
               <motion.span key={i} style={{ display: "inline-block", whiteSpace: "pre" }} initial={{ opacity: 0, y: "0.35em", filter: "blur(8px)" }} animate={{ opacity: 1, y: 0, filter: "blur(0px)" }} transition={{ delay: 0.15 + i * 0.045, duration: 0.7, ease: [0.22, 1, 0.36, 1] }}>{ch}</motion.span>
             )) : GREETING}
