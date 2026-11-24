@@ -4,8 +4,8 @@ import { SCENE_LIST } from "@/components/Art";
 /** One illustration per section, drawn in the app palette. `hue` varies the backdrop when a scene repeats. */
 export const SECTION_SCENE: Record<string, { scene: Scene; hue: number }> = {
   "/quran": { scene: "mushaf", hue: 0 }, "/tasbeeh": { scene: "beads", hue: 0 }, "/duas": { scene: "hands", hue: 0 }, "/adhkar": { scene: "lantern", hue: 0 },
-  "/names": { scene: "star", hue: 0 }, "/hadith": { scene: "arch", hue: 0 }, "/quotes": { scene: "leaf", hue: 0 }, "/calendar": { scene: "moon", hue: 0 },
-  "/zakat": { scene: "dates", hue: 0 }, "/ramadan": { scene: "mosque", hue: 1 }, "/mecca": { scene: "kaaba", hue: 0 }, "/ai": { scene: "chat", hue: 0 },
+  "/names": { scene: "star", hue: 0 }, "/hadith": { scene: "arch", hue: 0 }, "/quotes": { scene: "leaf", hue: 0 },
+  "/ramadan": { scene: "mosque", hue: 1 }, "/ai": { scene: "chat", hue: 0 },
   "/saved": { scene: "bookmark", hue: 0 },
   "/library": { scene: "book", hue: 2 }, "/feedback": { scene: "lantern", hue: 1 }, "/importance": { scene: "arch", hue: 1 }, "/special": { scene: "hands", hue: 1 },
 };
