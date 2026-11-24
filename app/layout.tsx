@@ -16,7 +16,7 @@ const ml = Noto_Sans_Malayalam({ subsets: ["malayalam"], weight: ["400", "500", 
 export const metadata: Metadata = {
   title: "Hisaabi",
   description: "Your all-in-one Muslim companion",
-  icons: { icon: "/img/hisaabi_round.png", apple: "/icons/apple-touch-icon.png" },
+  icons: { icon: "/icons/icon-192.png", apple: "/icons/apple-touch-icon.png" },
   appleWebApp: { capable: true, title: "Hisaabi", statusBarStyle: "black-translucent" },
 };
 
