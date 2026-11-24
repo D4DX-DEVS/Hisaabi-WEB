@@ -5,7 +5,7 @@ import { Fragment, Suspense, useEffect, useState, useSyncExternalStore } from "r
 import PwaBoot from "./PwaBoot";
 import { MotionConfig, motion } from "framer-motion";
 import {
-  Bot, BookOpen, BookText, Flower2, Lightbulb, Calculator, CalendarDays, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Info, Mail, ShieldCheck, Video, HandHeart, LayoutGrid, X,
+  Bot, BookOpen, BookText, Flower2, Lightbulb, Calculator, CalendarDays, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, PanelLeftClose, PanelLeftOpen, Info, Mail, ShieldCheck, Video, HandHeart, LayoutGrid, X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -35,9 +35,9 @@ function NavLinks() {
           {g.items.map(([href, Icon, label]) => {
             const on = isOn(p, href);
             return (
-              <Link key={href} href={href} className={on ? "on" : ""} aria-current={on ? "page" : undefined}>
+              <Link key={href} href={href} title={label} className={on ? "on" : ""} aria-current={on ? "page" : undefined}>
                 {on && <motion.span layoutId="pill" className="pill" transition={{ type: "spring", stiffness: 380, damping: 32 }} />}
-                <Icon /> {label}
+                <Icon /> <span className="lbl">{label}</span>
               </Link>
             );
           })}
@@ -94,15 +94,32 @@ function TabBar() {
   );
 }
 
+const SUPPORT = process.env.NEXT_PUBLIC_SUPPORT_URL;
+/** Opens the same support page as the app's Support Us button. */
+function Support({ className }: { className: string }) {
+  if (!SUPPORT) return null;
+  return <a href={SUPPORT} target="_blank" rel="noreferrer" className={className} title="Support us"><Heart size={16} aria-hidden /> <span className="lbl">Support us</span></a>;
+}
+
+const RAIL_EVENT = "hisaabi-rail";
+const subscribeRail = (cb: () => void) => { window.addEventListener(RAIL_EVENT, cb); return () => window.removeEventListener(RAIL_EVENT, cb); };
+
 export default function Shell({ children }: { children: React.ReactNode }) {
   // pages read the clock/localStorage/geolocation, so render them only in the browser
   const mounted = useSyncExternalStore(() => () => {}, () => true, () => false);
+  // the sidebar can shrink to icons; the choice is remembered on this browser
+  const mini = useSyncExternalStore(subscribeRail, () => { try { return localStorage.getItem("hisaabi.rail") === "mini"; } catch { return false; } }, () => false);
+  const toggleRail = () => { try { localStorage.setItem("hisaabi.rail", mini ? "full" : "mini"); } catch {} window.dispatchEvent(new Event(RAIL_EVENT)); };
   return (
     <MotionConfig reducedMotion="user">
       <div className="shell">
-        <nav className="rail" aria-label="Main">
-          {/* eslint-disable-next-line @next/next/no-img-element */}
-          <Link href="/" aria-label="Hisaabi home"><img className="logo" src="/img/Hisaabi-grn.png" alt="Hisaabi" /></Link>
+        <nav className={"rail" + (mini ? " mini" : "")} aria-label="Main">
+          <div className="rail-head">
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <Link href="/" aria-label="Hisaabi home"><img className="logo" src="/img/Hisaabi-grn.png" alt="Hisaabi" /><img className="logo-mini" src="/img/hisaabi_round.png" alt="Hisaabi" /></Link>
+            <button type="button" className="rail-toggle" onClick={toggleRail} aria-label={mini ? "Expand sidebar" : "Collapse sidebar"} title={mini ? "Expand sidebar" : "Collapse sidebar"}>{mini ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}</button>
+          </div>
+          <Support className="support" />
           <Suspense fallback={null}><NavLinks /></Suspense>
         </nav>
         <main className="main">
@@ -112,6 +129,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
                 {/* eslint-disable-next-line @next/next/no-img-element */}
                 <img src="/img/Hisaabi-grn.png" alt="Hisaabi" />
               </Link>
+              <Support className="support sm" />
             </div>
             {mounted ? children : null}
           </div>
