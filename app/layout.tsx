@@ -1,13 +1,13 @@
 import type { Metadata, Viewport } from "next";
-import { Cormorant_Garamond, Manrope, Noto_Sans_Malayalam, Noto_Nastaliq_Urdu, Noto_Naskh_Arabic, Lateef } from "next/font/google";
+import { Poppins, Noto_Sans_Malayalam, Noto_Nastaliq_Urdu, Noto_Naskh_Arabic, Lateef } from "next/font/google";
 import "./globals.css";
 import Shell from "@/components/Shell";
 import { AuthProvider } from "@/lib/auth";
 import { LangProvider } from "@/lib/lang";
 import { AppearanceProvider } from "@/lib/appearance";
 
-const display = Cormorant_Garamond({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
-const body = Manrope({ subsets: ["latin"], variable: "--font-body" });
+const display = Poppins({ subsets: ["latin"], weight: ["500", "600", "700"], variable: "--font-display" });
+const body = Poppins({ subsets: ["latin"], weight: ["400", "500", "600", "700"], variable: "--font-body" });
 const ur = Noto_Nastaliq_Urdu({ subsets: ["arabic"], weight: ["400", "600"], variable: "--font-ur" });
 const naskh = Noto_Naskh_Arabic({ subsets: ["arabic"], weight: ["400", "600"], variable: "--font-naskh" });
 const lateef = Lateef({ subsets: ["arabic"], weight: ["400", "600"], variable: "--font-lateef" });
