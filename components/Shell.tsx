@@ -5,7 +5,7 @@ import { Fragment, Suspense, useEffect, useState, useSyncExternalStore } from "r
 import PwaBoot from "./PwaBoot";
 import { MotionConfig, motion } from "framer-motion";
 import {
-  Bot, BookOpen, BookText, Flower2, Lightbulb, Calculator, CalendarDays, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, PanelLeftClose, PanelLeftOpen, Info, Mail, ShieldCheck, Video, HandHeart, LayoutGrid, X,
+  Bot, BookOpen, BookText, Flower2, Lightbulb, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, PanelLeftClose, PanelLeftOpen, Info, Mail, ShieldCheck, HandHeart, LayoutGrid, X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -13,9 +13,8 @@ type Item = readonly [href: string, Icon: LucideIcon, label: string];
 export const GROUPS: { title: string; items: Item[] }[] = [
   { title: "Daily", items: [["/", Home, "Home"], ["/prayer", Clock, "Prayer times"], ["/quran", BookOpen, "Quran"], ["/tasbeeh", CircleDot, "Tasbeeh"]] },
   { title: "Remembrance", items: [["/duas", HandHeart, "Duas"], ["/adhkar", Scroll, "Adhkar"], ["/names", Sparkles, "Names of Allah"], ["/hadith", Library, "Hadith"], ["/quotes", Quote, "Quotes"]] },
-  { title: "Learn", items: [["/library", BookText, "Library"], ["/importance", Lightbulb, "Importance"], ["/special", Flower2, "Special duas"]] },
-  { title: "Tools", items: [["/calendar", CalendarDays, "Calendar"], ["/zakat", Calculator, "Zakat"], ["/ramadan", Moon, "Ramadan"], ["/mecca", Video, "Mecca live"], ["/ai", Bot, "Assistant"]] },
-  { title: "Help", items: [["/feedback", MessageSquare, "Feedback"], ["/about", Info, "About"], ["/contact", Mail, "Contact"], ["/privacy", ShieldCheck, "Privacy"]] },
+  { title: "Learn", items: [["/library", BookText, "Library"], ["/importance", Lightbulb, "Importance"], ["/special", Flower2, "Special duas"], ["/ramadan", Moon, "Ramadan"]] },
+  { title: "Help", items: [["/feedback", MessageSquare, "Feedback"], ["/about", Info, "About"], ["/contact", Mail, "Contact"], ["/privacy", ShieldCheck, "Privacy"], ["/ai", Bot, "Assistant"]] },
   { title: "You", items: [["/saved", Star, "Saved"], ["/settings", Cog, "Settings"], ["/login", UserRound, "Account"]] },
 ];
 export const NAV = GROUPS.flatMap((g) => g.items);
