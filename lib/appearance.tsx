@@ -3,6 +3,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 
 export type ArabicFont = "amiri" | "uthmani" | "naskh" | "lateef";
 export type Size = "small" | "normal" | "large" | "xlarge";
+export type Theme = "dark" | "light" | "system";
 
 export const ARABIC_FONTS: { id: ArabicFont; label: string }[] = [
   { id: "amiri", label: "Amiri" }, { id: "uthmani", label: "Uthmani" }, { id: "naskh", label: "Noto Naskh" }, { id: "lateef", label: "Lateef" },
@@ -11,9 +12,11 @@ export const SIZES: { id: Size; label: string; scale: number }[] = [
   { id: "small", label: "Small", scale: 0.85 }, { id: "normal", label: "Normal", scale: 1 }, { id: "large", label: "Large", scale: 1.2 }, { id: "xlarge", label: "Extra large", scale: 1.4 },
 ];
 
-type Prefs = { arabicFont: ArabicFont; arabicSize: Size; translationSize: Size };
+export const THEMES: { id: Theme; label: string }[] = [{ id: "dark", label: "Dark" }, { id: "light", label: "Light" }, { id: "system", label: "Match device" }];
+
+type Prefs = { arabicFont: ArabicFont; arabicSize: Size; translationSize: Size; theme: Theme };
 const KEY = "hisaabi.appearance";
-const DEFAULT: Prefs = { arabicFont: "amiri", arabicSize: "normal", translationSize: "normal" };
+const DEFAULT: Prefs = { arabicFont: "amiri", arabicSize: "normal", translationSize: "normal", theme: "dark" };
 
 const read = (): Prefs => {
   try {
@@ -22,6 +25,7 @@ const read = (): Prefs => {
       arabicFont: ARABIC_FONTS.some((f) => f.id === v.arabicFont) ? v.arabicFont : DEFAULT.arabicFont,
       arabicSize: SIZES.some((s) => s.id === v.arabicSize) ? v.arabicSize : DEFAULT.arabicSize,
       translationSize: SIZES.some((s) => s.id === v.translationSize) ? v.translationSize : DEFAULT.translationSize,
+      theme: THEMES.some((t) => t.id === v.theme) ? v.theme : DEFAULT.theme,
     };
   } catch { return DEFAULT; }
 };
@@ -38,6 +42,15 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
     root.style.setProperty("--ar-scale", String(SIZES.find((s) => s.id === prefs.arabicSize)?.scale ?? 1));
     root.style.setProperty("--tr-scale", String(SIZES.find((s) => s.id === prefs.translationSize)?.scale ?? 1));
   }, [prefs]);
+  // theme lives on <html data-theme>; the inline script in layout.tsx sets it before first paint, this keeps it in sync
+  useEffect(() => {
+    const mq = matchMedia("(prefers-color-scheme: light)");
+    const apply = () => { document.documentElement.dataset.theme = prefs.theme === "system" ? (mq.matches ? "light" : "dark") : prefs.theme; };
+    apply();
+    if (prefs.theme !== "system") return;
+    mq.addEventListener("change", apply);
+    return () => mq.removeEventListener("change", apply);
+  }, [prefs.theme]);
   const update = useCallback((p: Partial<Prefs>) => {
     setPrefs((cur) => { const next = { ...cur, ...p }; try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {} return next; });
   }, []);

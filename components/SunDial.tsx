@@ -33,8 +33,8 @@ export default function SunDial({ times, now, next, remaining, size = 380, delay
           const done = t.at <= now, on = t.name === next;
           return (
             <g key={t.name}>
-              <circle cx={mx} cy={my} r={on ? 6 : 4} fill={done ? "#a6c420" : "#121f26"} stroke="#a6c420" strokeWidth="1.5" />
-              <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fontSize="12.5" fill={on ? "#cfe65e" : "#9fb0b6"} style={{ letterSpacing: "0.04em" }}>{t.name}</text>
+              <circle cx={mx} cy={my} r={on ? 6 : 4} style={{ fill: done ? "#a6c420" : "var(--bg)" }} stroke="#a6c420" strokeWidth="1.5" />
+              <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fontSize="12.5" style={{ letterSpacing: "0.04em", fill: on ? "var(--gold-hi)" : "var(--muted)" }}>{t.name}</text>
             </g>
           );
         })}

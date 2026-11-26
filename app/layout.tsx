@@ -22,9 +22,13 @@ export const metadata: Metadata = {
 
 export const viewport: Viewport = { themeColor: "#1a2a32" };
 
+// sets the saved theme on <html> before the first paint, so a light-mode visitor never sees a dark flash
+const THEME_BOOT = `try{var t=JSON.parse(localStorage.getItem("hisaabi.appearance")||"{}").theme;if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){}`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={`${display.variable} ${body.variable} ${ml.variable} ${ur.variable} ${naskh.variable} ${lateef.variable}`}>
+    <html lang="en" className={`${display.variable} ${body.variable} ${ml.variable} ${ur.variable} ${naskh.variable} ${lateef.variable}`} data-theme="dark" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{ __html: THEME_BOOT }} /></head>
       <body><AuthProvider><LangProvider><AppearanceProvider><Shell>{children}</Shell></AppearanceProvider></LangProvider></AuthProvider></body>
     </html>
   );

@@ -22,7 +22,7 @@ function Ring({ count, goal, onTap }: { count: number; goal: number; onTap: () =
       style={{ position: "relative", width: 320, height: 320, maxWidth: "86vw", maxHeight: "86vw", background: "none", border: 0, cursor: "pointer", color: "inherit" }}>
       <svg viewBox="0 0 320 320" width="100%" height="100%">
         <defs><linearGradient id="g" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#cfe65e" /><stop offset="1" stopColor="#7f9a12" /></linearGradient></defs>
-        <circle cx="160" cy="160" r={R} fill="rgba(20,34,41,.8)" stroke="rgba(166,196,32,.14)" strokeWidth="2" />
+        <circle cx="160" cy="160" r={R} style={{ fill: "var(--surface)" }} stroke="rgba(166,196,32,.14)" strokeWidth="2" />
         <circle cx="160" cy="160" r={R - 18} fill="none" stroke="rgba(166,196,32,.08)" strokeDasharray="2 8" />
         <motion.circle cx="160" cy="160" r={R} fill="none" stroke="url(#g)" strokeWidth="5" strokeLinecap="round" transform="rotate(-90 160 160)"
           strokeDasharray={C} animate={{ strokeDashoffset: C * (1 - within / goal) }} transition={{ type: "spring", stiffness: 120, damping: 20 }} />

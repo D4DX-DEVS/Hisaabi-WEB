@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useState } from "react";
 import LangSwitch from "@/components/LangSwitch";
 import PageHead from "@/components/PageHead";
-import { ARABIC_FONTS, SIZES, useAppearance } from "@/lib/appearance";
+import { ARABIC_FONTS, SIZES, THEMES, useAppearance } from "@/lib/appearance";
 import { useAuth } from "@/lib/auth";
 import { pick, useLang } from "@/lib/lang";
 import { METHODS, usePrayerSettings } from "@/lib/prayer";
@@ -34,6 +34,12 @@ export default function Settings() {
     <>
       <PageHead scene="star" title="Settings" sub="Your choices are saved on this device. Prayer settings also sync with your account." />
       <div style={{ display: "grid", gap: 18 }}>
+        <Card title="Theme" hint="Dark suits night reading; light is easier in daylight.">
+          <div className="choice" role="group" aria-label="Theme">
+            {THEMES.map((t) => <button key={t.id} type="button" aria-pressed={prefs.theme === t.id} onClick={() => setPrefs({ theme: t.id })}>{t.label}</button>)}
+          </div>
+        </Card>
+
         <Card title="Content language" hint="For duas, hadith, quotes, names of Allah, adhkar and articles. Arabic stays as it is.">
           <LangSwitch full />
         </Card>

@@ -37,7 +37,9 @@ export default function Login() {
       <div className="card" style={{ display: "grid", gap: 12, padding: "32px 28px" }}>
         <div style={{ textAlign: "center", marginBottom: 6 }}>
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src="/img/Hisaabi-grn.png" alt="Hisaabi" style={{ height: 40, width: "auto", marginBottom: 18 }} />
+          <img className="when-dark" src="/img/Hisaabi-grn.png" alt="Hisaabi" style={{ height: 40, width: "auto", margin: "0 auto 18px" }} />
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img className="when-light" src="/img/Hisaabi-drk.png" alt="Hisaabi" style={{ height: 40, width: "auto", margin: "0 auto 18px" }} />
           <h1 className="h1" style={{ marginBottom: 6 }}>Sign in</h1>
           <p className="sub" style={{ margin: 0 }}>Use the same Google or Apple account as the Hisaabi app to continue with your account.</p>
         </div>

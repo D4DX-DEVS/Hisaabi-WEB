@@ -3,9 +3,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { Fragment, Suspense, useEffect, useState, useSyncExternalStore } from "react";
 import PwaBoot from "./PwaBoot";
+import { useAppearance } from "@/lib/appearance";
 import { MotionConfig, motion } from "framer-motion";
 import {
-  Bot, BookOpen, BookText, Flower2, Lightbulb, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, PanelLeftClose, PanelLeftOpen, Info, Mail, ShieldCheck, HandHeart, LayoutGrid, X,
+  Bot, BookOpen, BookText, Flower2, Lightbulb, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, PanelLeftClose, PanelLeftOpen, Sun, MoonStar, Info, Mail, ShieldCheck, HandHeart, LayoutGrid, X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -100,6 +101,17 @@ function Support({ className }: { className: string }) {
   return <a href={SUPPORT} target="_blank" rel="noreferrer" className={className} title="Support us"><Heart size={16} aria-hidden /> <span className="lbl">Support us</span></a>;
 }
 
+/** Flips between light and dark; the full choice (including "match device") is in Settings. */
+function ThemeToggle({ className }: { className: string }) {
+  const { update } = useAppearance();
+  const flip = () => update({ theme: document.documentElement.dataset.theme === "light" ? "dark" : "light" });
+  return (
+    <button type="button" className={className} onClick={flip} aria-label="Switch light or dark theme" title="Light / dark">
+      <Sun size={18} className="when-dark" aria-hidden /><MoonStar size={18} className="when-light" aria-hidden />
+    </button>
+  );
+}
+
 const RAIL_EVENT = "hisaabi-rail";
 const subscribeRail = (cb: () => void) => { window.addEventListener(RAIL_EVENT, cb); return () => window.removeEventListener(RAIL_EVENT, cb); };
 
@@ -115,7 +127,8 @@ export default function Shell({ children }: { children: React.ReactNode }) {
         <nav className={"rail" + (mini ? " mini" : "")} aria-label="Main">
           <div className="rail-head">
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <Link href="/" aria-label="Hisaabi home"><img className="logo" src="/img/Hisaabi-grn.png" alt="Hisaabi" /><img className="logo-mini" src="/img/hisaabi_round.png" alt="Hisaabi" /></Link>
+            <Link href="/" aria-label="Hisaabi home"><img className="logo when-dark" src="/img/Hisaabi-grn.png" alt="Hisaabi" /><img className="logo when-light" src="/img/Hisaabi-drk.png" alt="Hisaabi" /><img className="logo-mini" src="/img/hisaabi_round.png" alt="Hisaabi" /></Link>
+            <ThemeToggle className="rail-toggle" />
             <button type="button" className="rail-toggle" onClick={toggleRail} aria-label={mini ? "Expand sidebar" : "Collapse sidebar"} title={mini ? "Expand sidebar" : "Collapse sidebar"}>{mini ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}</button>
           </div>
           <Support className="support" />
@@ -126,8 +139,9 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             <div className="topbar">
               <Link href="/" className="logo-m" aria-label="Hisaabi home">
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src="/img/Hisaabi-grn.png" alt="Hisaabi" />
+                <img className="when-dark" src="/img/Hisaabi-grn.png" alt="Hisaabi" /><img className="when-light" src="/img/Hisaabi-drk.png" alt="Hisaabi" />
               </Link>
+              <ThemeToggle className="icon-btn" />
               <Support className="support sm" />
             </div>
             {mounted ? children : null}
