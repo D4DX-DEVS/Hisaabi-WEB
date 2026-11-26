@@ -36,7 +36,7 @@ export default function Settings() {
       <div style={{ display: "grid", gap: 18 }}>
         <Card title="Theme" hint="Dark suits night reading; light is easier in daylight.">
           <div className="choice" role="group" aria-label="Theme">
-            {THEMES.map((t) => <button key={t.id} type="button" aria-pressed={prefs.theme === t.id} onClick={() => setPrefs({ theme: t.id })}>{t.label}</button>)}
+            {THEMES.map((t) => <button key={t.id} type="button" aria-pressed={prefs.mode === t.id} onClick={() => setPrefs({ mode: t.id })}>{t.label}</button>)}
           </div>
         </Card>
 

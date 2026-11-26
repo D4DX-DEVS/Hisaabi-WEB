@@ -14,9 +14,9 @@ export const SIZES: { id: Size; label: string; scale: number }[] = [
 
 export const THEMES: { id: Theme; label: string }[] = [{ id: "dark", label: "Dark" }, { id: "light", label: "Light" }, { id: "system", label: "Match device" }];
 
-type Prefs = { arabicFont: ArabicFont; arabicSize: Size; translationSize: Size; theme: Theme };
+type Prefs = { arabicFont: ArabicFont; arabicSize: Size; translationSize: Size; mode: Theme };
 const KEY = "hisaabi.appearance";
-const DEFAULT: Prefs = { arabicFont: "amiri", arabicSize: "normal", translationSize: "normal", theme: "system" };
+const DEFAULT: Prefs = { arabicFont: "amiri", arabicSize: "normal", translationSize: "normal", mode: "system" };
 
 const read = (): Prefs => {
   try {
@@ -25,7 +25,8 @@ const read = (): Prefs => {
       arabicFont: ARABIC_FONTS.some((f) => f.id === v.arabicFont) ? v.arabicFont : DEFAULT.arabicFont,
       arabicSize: SIZES.some((s) => s.id === v.arabicSize) ? v.arabicSize : DEFAULT.arabicSize,
       translationSize: SIZES.some((s) => s.id === v.translationSize) ? v.translationSize : DEFAULT.translationSize,
-      theme: THEMES.some((t) => t.id === v.theme) ? v.theme : DEFAULT.theme,
+      // stored as "mode": the older "theme" value was saved as dark for everyone, so it is ignored and all start on match device
+      mode: THEMES.some((t) => t.id === v.mode) ? v.mode : DEFAULT.mode,
     };
   } catch { return DEFAULT; }
 };
@@ -45,12 +46,12 @@ export function AppearanceProvider({ children }: { children: React.ReactNode }) 
   // theme lives on <html data-theme>; the inline script in layout.tsx sets it before first paint, this keeps it in sync
   useEffect(() => {
     const mq = matchMedia("(prefers-color-scheme: light)");
-    const apply = () => { document.documentElement.dataset.theme = prefs.theme === "system" ? (mq.matches ? "light" : "dark") : prefs.theme; };
+    const apply = () => { document.documentElement.dataset.theme = prefs.mode === "system" ? (mq.matches ? "light" : "dark") : prefs.mode; };
     apply();
-    if (prefs.theme !== "system") return;
+    if (prefs.mode !== "system") return;
     mq.addEventListener("change", apply);
     return () => mq.removeEventListener("change", apply);
-  }, [prefs.theme]);
+  }, [prefs.mode]);
   const update = useCallback((p: Partial<Prefs>) => {
     setPrefs((cur) => { const next = { ...cur, ...p }; try { localStorage.setItem(KEY, JSON.stringify(next)); } catch {} return next; });
   }, []);
