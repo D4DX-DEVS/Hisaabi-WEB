@@ -335,8 +335,8 @@ html:not([data-theme="light"]) .when-light, html[data-theme="light"] .when-dark 
 /* ---------- light theme: warm ivory paper, white cards, deep olive accents for text ---------- */
 html[data-theme="light"] {
   color-scheme: light;
-  --bg: #f5f4ee;
-  --bg2: #eeede5;
+  --bg: #edece4;
+  --bg2: #e5e4da;
   --panel: #ffffff;
   --panel2: #fdfdf9;
   --gold: #5a7300;          /* lime is too pale for text on white, so accents darken to olive */
@@ -377,8 +377,8 @@ html[data-theme="light"] .shimmer { background: linear-gradient(90deg, rgba(21, 
 html[data-theme="light"] .medal svg { fill: rgba(166, 196, 32, 0.12); }
 html[data-theme="light"] .tile { box-shadow: var(--lift); }
 /* light art: pale sage paper, olive shapes, warm gold; the title sits on a white fade */
-html[data-theme="light"] { --art-bg1: #f7f9ec; --art-bg2: #dde7bb; --art-l: #7f9b12; --art-ll: #a3bf2a; --art-s: #e2a300; --art-d: #fbfcf4; }
-html[data-theme="light"] .tile::after { background: linear-gradient(180deg, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.92) 100%); }
+html[data-theme="light"] { --art-bg1: #e4ebcc; --art-bg2: #c3d293; --art-l: #5f7d06; --art-ll: #86a516; --art-s: #d99400; --art-d: #f3f6e6; }
+html[data-theme="light"] .tile::after { background: linear-gradient(180deg, rgba(243, 246, 230, 0) 60%, rgba(243, 246, 230, 0.85) 100%); }
 html[data-theme="light"] .tile-label .display { color: var(--ivory); text-shadow: none; }
 html[data-theme="light"] .tile-label small { color: var(--muted); }
 html[data-theme="light"] .banner { background: linear-gradient(120deg, #ffffff, #f1f5e1 70%); box-shadow: var(--lift); }

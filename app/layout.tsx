@@ -20,7 +20,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "Hisaabi", statusBarStyle: "black-translucent" },
 };
 
-export const viewport: Viewport = { themeColor: [{ media: "(prefers-color-scheme: light)", color: "#f5f4ee" }, { media: "(prefers-color-scheme: dark)", color: "#1a2a32" }] };
+export const viewport: Viewport = { themeColor: [{ media: "(prefers-color-scheme: light)", color: "#edece4" }, { media: "(prefers-color-scheme: dark)", color: "#1a2a32" }] };
 
 // sets the saved theme on <html> before the first paint, so a light-mode visitor never sees a dark flash
 const THEME_BOOT = `try{var t=JSON.parse(localStorage.getItem("hisaabi.appearance")||"{}").theme||"system";if(t==="system")t=matchMedia("(prefers-color-scheme: light)").matches?"light":"dark";document.documentElement.dataset.theme=t==="light"?"light":"dark"}catch(e){}`;
