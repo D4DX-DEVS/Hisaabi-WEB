@@ -131,6 +131,17 @@ export default function Shell({ children }: { children: React.ReactNode }) {
               <Support className="support sm" />
             </div>
             {mounted ? children : null}
+            <footer className="foot">
+              <span>© {new Date().getFullYear()} Hisaabi. All rights reserved.</span>
+              <nav aria-label="Legal">
+                <a href="https://d4dx.co/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a>
+                <a href="https://d4dx.co/terms-conditions" target="_blank" rel="noreferrer">Terms &amp; Conditions</a>
+              </nav>
+              <a href="https://d4dx.co/" target="_blank" rel="noreferrer" className="foot-by">
+                {/* eslint-disable-next-line @next/next/no-img-element */}
+                Powered by <img src="/img/d4dx.png" alt="" width={18} height={18} /> <b>D4DX Innovations</b>
+              </a>
+            </footer>
           </div>
         </main>
         {mounted && <PwaBoot />}

@@ -391,3 +391,12 @@ html[data-theme="light"] .support { background: #fff; }
   html[data-theme="light"] .sheet-back { background: rgba(21, 35, 43, 0.35); }
   html[data-theme="light"] .sheet-grid a { background: rgba(21, 35, 43, 0.04); }
 }
+
+/* ---------- footer: legal links and maker credit ---------- */
+.foot { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 28px; margin-top: 64px; padding-top: 22px; border-top: 1px solid var(--hair); font-size: 0.82rem; color: var(--muted); }
+.foot nav { display: flex; flex-wrap: wrap; gap: 8px 22px; }
+.foot a { transition: color 0.3s var(--ease); }
+.foot a:hover { color: var(--ivory); }
+.foot-by { display: inline-flex; align-items: center; gap: 7px; }
+.foot-by b { color: var(--gold); font-weight: 600; }
+@media (max-width: 860px) { .foot { flex-direction: column; text-align: center; margin-top: 44px; } .foot nav { justify-content: center; } }
