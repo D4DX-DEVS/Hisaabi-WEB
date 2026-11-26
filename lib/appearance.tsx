@@ -16,7 +16,7 @@ export const THEMES: { id: Theme; label: string }[] = [{ id: "dark", label: "Dar
 
 type Prefs = { arabicFont: ArabicFont; arabicSize: Size; translationSize: Size; theme: Theme };
 const KEY = "hisaabi.appearance";
-const DEFAULT: Prefs = { arabicFont: "amiri", arabicSize: "normal", translationSize: "normal", theme: "dark" };
+const DEFAULT: Prefs = { arabicFont: "amiri", arabicSize: "normal", translationSize: "normal", theme: "system" };
 
 const read = (): Prefs => {
   try {

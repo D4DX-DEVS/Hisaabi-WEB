@@ -2,7 +2,8 @@
 // Used where the app has no photo for a category, so every tile looks designed, not stock.
 export type Scene = "mosque" | "lantern" | "beads" | "kaaba" | "book" | "dates" | "arch" | "moon" | "drop" | "leaf" | "star" | "hands" | "mushaf" | "chat" | "bookmark";
 
-const L = "#a6c420", LL = "#cfe65e", S = "#ffd369", D = "#14232a";
+// colours come from CSS variables so light mode can repaint the art; the fallbacks are the dark palette
+const L = "var(--art-l, #a6c420)", LL = "var(--art-ll, #cfe65e)", S = "var(--art-s, #ffd369)", D = "var(--art-d, #14232a)";
 
 const Stars = () => (
   <g fill={LL} opacity=".7" className="art-stars">
@@ -134,7 +135,7 @@ export default function Art({ scene, hue = 0, fit = "slice" }: { scene: Scene; h
     <svg viewBox="0 0 400 300" preserveAspectRatio={fit === "meet" ? "xMidYMid meet" : "xMidYMid slice"} aria-hidden="true" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", zIndex: -2 }}>
       <defs>
         <linearGradient id={`bg-${id}`} x1="0" y1="0" x2="1" y2="1">
-          <stop offset="0" stopColor={["#25434b", "#233f3a", "#1f3b4d"][hue % 3]} /><stop offset="1" stopColor="#14232a" />
+          <stop offset="0" stopColor={`var(--art-bg1, ${["#25434b", "#233f3a", "#1f3b4d"][hue % 3]})`} /><stop offset="1" stopColor="var(--art-bg2, #14232a)" />
         </linearGradient>
         <radialGradient id={id} cx=".5" cy=".4" r=".6"><stop offset="0" stopColor="#a6c420" stopOpacity=".22" /><stop offset="1" stopColor="#a6c420" stopOpacity="0" /></radialGradient>
       </defs>

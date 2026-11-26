@@ -376,8 +376,12 @@ html[data-theme="light"] .langs button.on, html[data-theme="light"] .choice butt
 html[data-theme="light"] .shimmer { background: linear-gradient(90deg, rgba(21, 35, 43, 0.04), rgba(166, 196, 32, 0.14), rgba(21, 35, 43, 0.04)); background-size: 200% 100%; }
 html[data-theme="light"] .medal svg { fill: rgba(166, 196, 32, 0.12); }
 html[data-theme="light"] .tile { box-shadow: var(--lift); }
+/* light art: pale sage paper, olive shapes, warm gold; the title sits on a white fade */
+html[data-theme="light"] { --art-bg1: #f7f9ec; --art-bg2: #dde7bb; --art-l: #7f9b12; --art-ll: #a3bf2a; --art-s: #e2a300; --art-d: #fbfcf4; }
+html[data-theme="light"] .tile::after { background: linear-gradient(180deg, rgba(255, 255, 255, 0) 35%, rgba(255, 255, 255, 0.92) 100%); }
+html[data-theme="light"] .tile-label .display { color: var(--ivory); text-shadow: none; }
+html[data-theme="light"] .tile-label small { color: var(--muted); }
 html[data-theme="light"] .banner { background: linear-gradient(120deg, #ffffff, #f1f5e1 70%); box-shadow: var(--lift); }
-html[data-theme="light"] .banner-art svg { filter: brightness(0.78) saturate(1.5) contrast(1.15); }
 html[data-theme="light"] .mushaf { background: linear-gradient(160deg, #fffdf6, #f8f4e6); box-shadow: inset 0 0 0 6px rgba(166, 196, 32, 0.07), inset 0 0 0 7px var(--hair), var(--lift); }
 html[data-theme="light"] audio { color-scheme: light; }
 html[data-theme="light"] .icon-card { background: #fff; box-shadow: var(--lift); }
