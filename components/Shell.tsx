@@ -132,7 +132,7 @@ export default function Shell({ children }: { children: React.ReactNode }) {
             </div>
             {mounted ? children : null}
             <footer className="foot">
-              <span>© {new Date().getFullYear()} Hisaabi. All rights reserved.</span>
+              <span>© {new Date().getFullYear()} D4DX Innovations LLP. All rights reserved.</span>
               <nav aria-label="Legal">
                 <a href="https://d4dx.co/privacy-policy" target="_blank" rel="noreferrer">Privacy Policy</a>
                 <a href="https://d4dx.co/terms-conditions" target="_blank" rel="noreferrer">Terms &amp; Conditions</a>
