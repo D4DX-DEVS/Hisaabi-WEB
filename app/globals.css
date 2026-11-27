@@ -406,3 +406,36 @@ html[data-theme="light"] .support { background: #fff; }
 .main { position: relative; }
 .home-actions { position: absolute; top: 18px; right: clamp(20px, 4vw, 56px); display: flex; gap: 10px; }
 @media (max-width: 860px) { .home-actions { display: none; } }
+
+/* ---------- motion everywhere ---------- */
+/* grids: the first dozen items rise in one after another on load; "backwards" fill so hover transforms still work after */
+@keyframes rise-in { from { opacity: 0; transform: translateY(16px) scale(0.98); filter: blur(4px); } to { opacity: 1; transform: none; filter: none; } }
+.grid > *:nth-child(-n+12) { animation: rise-in 0.6s var(--ease) backwards; }
+.grid > *:nth-child(2) { animation-delay: 0.05s; } .grid > *:nth-child(3) { animation-delay: 0.1s; } .grid > *:nth-child(4) { animation-delay: 0.15s; }
+.grid > *:nth-child(5) { animation-delay: 0.2s; } .grid > *:nth-child(6) { animation-delay: 0.25s; } .grid > *:nth-child(7) { animation-delay: 0.3s; }
+.grid > *:nth-child(8) { animation-delay: 0.35s; } .grid > *:nth-child(9) { animation-delay: 0.4s; } .grid > *:nth-child(10) { animation-delay: 0.45s; }
+.grid > *:nth-child(11) { animation-delay: 0.5s; } .grid > *:nth-child(12) { animation-delay: 0.55s; }
+/* everything further down fades up as it scrolls into view (browsers without scroll timelines just show it) */
+@supports (animation-timeline: view()) {
+  @keyframes reveal { from { opacity: 0; transform: translateY(28px); } to { opacity: 1; transform: none; } }
+  .card:not(.grid > *), .grid > *:nth-child(n+13), .page h2 { animation: reveal linear backwards; animation-timeline: view(); animation-range: entry 0% entry 45%; }
+}
+/* round icon buttons and plain cards answer the pointer too */
+.icon-btn { transition: transform 0.3s var(--ease), border-color 0.3s var(--ease), color 0.3s var(--ease), background 0.3s var(--ease); }
+.icon-btn:hover { transform: translateY(-2px); border-color: var(--gold); color: var(--gold); background: var(--gold-soft); }
+.icon-btn:hover svg { transition: transform 0.6s var(--ease); transform: rotate(45deg); }
+.icon-btn:active { transform: scale(0.94); }
+div.card:hover { border-color: rgba(166, 196, 32, 0.3); }
+.back svg { transition: transform 0.3s var(--ease); }
+.back:hover svg { transform: translateX(-3px); }
+@media (prefers-reduced-motion: reduce) {
+  .grid > *, .card, .page h2 { animation: none !important; }
+  .icon-btn:hover svg { transform: none; }
+}
+/* theme switch: circle reveal from the toggle, and the sun/moon spins in */
+::view-transition-old(root), ::view-transition-new(root) { animation: none; mix-blend-mode: normal; }
+::view-transition-new(root) { animation: theme-reveal 0.7s var(--ease); }
+@keyframes theme-reveal { from { clip-path: circle(0 at var(--vt-x, 100%) var(--vt-y, 0)); } to { clip-path: circle(150vmax at var(--vt-x, 100%) var(--vt-y, 0)); } }
+.icon-btn .when-dark, .icon-btn .when-light { animation: icon-spin 0.6s var(--ease); }
+@keyframes icon-spin { from { opacity: 0; transform: rotate(-120deg) scale(0.4); } to { opacity: 1; transform: none; } }
+@media (prefers-reduced-motion: reduce) { .icon-btn .when-dark, .icon-btn .when-light { animation: none; } }

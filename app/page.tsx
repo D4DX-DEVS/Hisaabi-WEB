@@ -59,7 +59,15 @@ export default function Home() {
   return (
     <>
       <div className="home-actions">
-        <button type="button" className="icon-btn" onClick={() => update({ mode: document.documentElement.dataset.theme === "light" ? "dark" : "light" })} aria-label="Switch light or dark theme" title="Light / dark">
+        <button type="button" className="icon-btn" onClick={(e) => {
+          const mode = document.documentElement.dataset.theme === "light" ? "dark" : "light";
+          const go = () => { document.documentElement.dataset.theme = mode; update({ mode }); };
+          // the new theme spreads out in a circle from the button where the browser can animate it
+          if (!document.startViewTransition || matchMedia("(prefers-reduced-motion: reduce)").matches) return go();
+          document.documentElement.style.setProperty("--vt-x", `${e.clientX}px`);
+          document.documentElement.style.setProperty("--vt-y", `${e.clientY}px`);
+          document.startViewTransition(go);
+        }} aria-label="Switch light or dark theme" title="Light / dark">
           <Sun size={18} className="when-dark" aria-hidden /><MoonStar size={18} className="when-light" aria-hidden />
         </button>
         <Link href="/settings" className="icon-btn" aria-label="Settings" title="Settings"><Cog size={18} aria-hidden /></Link>
