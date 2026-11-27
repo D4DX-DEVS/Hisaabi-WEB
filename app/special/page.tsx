@@ -7,7 +7,7 @@ import { items, useApi } from "@/lib/api";
 import { catScene } from "@/lib/images";
 import { pickField, useLang } from "@/lib/lang";
 
-export type SpecialCat = { id: string; name: string; name_malayalam?: string; name_urdu?: string; parentId?: string | null };
+export type SpecialCat = { id: string; name: string; name_malayalam?: string; name_urdu?: string; parentId?: string | { id: string } | null };
 
 function List() {
   const { lang } = useLang();

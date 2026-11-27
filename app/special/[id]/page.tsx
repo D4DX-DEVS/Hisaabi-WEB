@@ -27,7 +27,7 @@ function Body({ id }: { id: string }) {
   const [page, setPage] = useState(1);
   const cats = useApi<unknown>("/content/special-categories");
   const res = useApi<Res>(`/content/special-categories/${id}/entries?page=${page}&limit=20`);
-  const children = items<SpecialCat>(cats.data, "categories").filter((c) => c.parentId === id);
+  const children = items<SpecialCat>(cats.data, "categories").filter((c) => (typeof c.parentId === "object" ? c.parentId?.id : c.parentId) === id); // the backend sends the parent as an object
   const list = items<Entry>(res.data, "entries");
   const cat = res.data?.category;
   return (
