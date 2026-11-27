@@ -33,7 +33,10 @@ export default function Home() {
   const { update } = useAppearance();
   const { lang } = useLang();
   // today's quote from the app (needs sign-in); signed-out visitors keep the greeting and verse below
-  const quote = items<Quote>(useApi<unknown>(`/content/daily-quotes?page=1&limit=1&date=${ymd(now)}`).data, "daily_quotes")[0];
+  // like the app: on Fridays the Friday quote comes first, the daily quote is the fallback
+  const friday = useApi<{ friday_quote?: Quote | null }>(now.getDay() === 5 ? `/content/friday-quotes/today?date=${ymd(now)}` : null).data?.friday_quote;
+  const daily = items<Quote>(useApi<unknown>(`/content/daily-quotes?page=1&limit=1&date=${ymd(now)}`).data, "daily_quotes")[0];
+  const quote = friday || daily;
   const quoteText = quote && pick(lang, quote)?.trim();
 
   return (
