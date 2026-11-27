@@ -18,7 +18,7 @@ const hijri = (d: Date) => new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
 // the entrance plays once per browser session, so coming back to Home is instant
 const introSeen = () => { try { return sessionStorage.getItem("hisaabi.intro") === "1"; } catch { return true; } };
 const GREETING = "Assalamu alaikum";
-type Quote = { text?: string; english?: string; malayalam?: string; urdu?: string; reference?: string };
+type Quote = { text?: string; english?: string; malayalam?: string; urdu?: string };
 const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 export default function Home() {
@@ -50,8 +50,6 @@ export default function Home() {
             <p className="muted" style={{ marginBottom: 18 }}><span className="gold">Today&apos;s quote</span> · {now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
             {quote.text && <p className="ar" style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.75rem)", lineHeight: 2.1, color: "var(--gold)", textAlign: "left", whiteSpace: "pre-line" }}>{quote.text.trim()}</p>}
             <p className={"display" + (lang === "urdu" ? " ur" : "")} dir={lang === "urdu" ? "rtl" : undefined} style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.8rem)", lineHeight: lang === "urdu" ? 2.2 : 1.3, color: "var(--ivory)", marginTop: 18 }}>{quoteText}</p>
-            {quote.reference && <p className="muted" style={{ marginTop: 14 }}>{quote.reference}</p>}
-            <Link href="/quotes" className="muted" style={{ display: "inline-block", marginTop: 22, fontSize: ".85rem", textDecoration: "underline", textUnderlineOffset: 4 }}>More quotes</Link>
           </div>
         ) : (
           <div>
