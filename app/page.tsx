@@ -48,8 +48,8 @@ export default function Home() {
         {quote && quoteText ? (
           <div>
             <p className="muted" style={{ marginBottom: 18 }}><span className="gold">Today&apos;s quote</span> · {now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
-            {quote.text && <p className="ar" style={{ fontSize: "clamp(1.6rem, 2.6vw, 2.2rem)", lineHeight: 1.7, color: "var(--gold)", textAlign: "left", whiteSpace: "pre-line" }}>{quote.text.trim()}</p>}
-            <p className={"display" + (lang === "urdu" ? " ur" : "")} dir={lang === "urdu" ? "rtl" : undefined} style={{ fontSize: "clamp(1.5rem, 2.4vw, 2.2rem)", lineHeight: lang === "urdu" ? 2.2 : 1.3, color: "var(--ivory)", marginTop: 18 }}>{quoteText}</p>
+            {quote.text && <p className="ar" style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.75rem)", lineHeight: 2.1, color: "var(--gold)", textAlign: "left", whiteSpace: "pre-line" }}>{quote.text.trim()}</p>}
+            <p className={"display" + (lang === "urdu" ? " ur" : "")} dir={lang === "urdu" ? "rtl" : undefined} style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.8rem)", lineHeight: lang === "urdu" ? 2.2 : 1.3, color: "var(--ivory)", marginTop: 18 }}>{quoteText}</p>
             {quote.reference && <p className="muted" style={{ marginTop: 14 }}>{quote.reference}</p>}
             <Link href="/quotes" className="muted" style={{ display: "inline-block", marginTop: 22, fontSize: ".85rem", textDecoration: "underline", textUnderlineOffset: 4 }}>More quotes</Link>
           </div>
