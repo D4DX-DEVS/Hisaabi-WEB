@@ -2,7 +2,8 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
-import { MapPin } from "lucide-react";
+import { MapPin, MoonStar, Settings as Cog, Sun } from "lucide-react";
+import { useAppearance } from "@/lib/appearance";
 import SunDial from "@/components/SunDial";
 import ImageTile from "@/components/ImageTile";
 import Banner from "@/components/Banner";
@@ -25,8 +26,16 @@ export default function Home() {
   const v = loc ? dayView(loc, s, now) : null;
   const tiles = GROUPS.flatMap((g) => g.items).filter(([h]) => SECTION_SCENE[h] && h !== "/saved");
 
+  const { update } = useAppearance();
+
   return (
     <>
+      <div className="home-actions">
+        <button type="button" className="icon-btn" onClick={() => update({ mode: document.documentElement.dataset.theme === "light" ? "dark" : "light" })} aria-label="Switch light or dark theme" title="Light / dark">
+          <Sun size={18} className="when-dark" aria-hidden /><MoonStar size={18} className="when-light" aria-hidden />
+        </button>
+        <Link href="/settings" className="icon-btn" aria-label="Settings" title="Settings"><Cog size={18} aria-hidden /></Link>
+      </div>
       <section style={{ display: "grid", gap: 40, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", alignItems: "center", marginBottom: 56 }}>
         <div>
           <p className="muted" style={{ marginBottom: 14 }}>{now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
