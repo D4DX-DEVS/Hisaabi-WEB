@@ -19,6 +19,7 @@ const hijri = (d: Date) => new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
 const introSeen = () => { try { return sessionStorage.getItem("hisaabi.intro") === "1"; } catch { return true; } };
 const GREETING = "Assalamu alaikum";
 type Quote = { text?: string; english?: string; malayalam?: string; urdu?: string };
+const FRIDAY_KEY = "hisaabi.fridayQuote";
 const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
 export default function Home() {
@@ -34,9 +35,19 @@ export default function Home() {
   const { lang } = useLang();
   // today's quote from the app (needs sign-in); signed-out visitors keep the greeting and verse below
   // like the app: on Fridays the Friday quote comes first, the daily quote is the fallback
-  const friday = useApi<{ friday_quote?: Quote | null }>(now.getDay() === 5 ? `/content/friday-quotes/today?date=${ymd(now)}` : null).data?.friday_quote;
-  const daily = items<Quote>(useApi<unknown>(`/content/daily-quotes?page=1&limit=1&date=${ymd(now)}`).data, "daily_quotes")[0];
-  const quote = friday || daily;
+  // the server hands out a random Friday quote on every call, so keep the first one for the rest of the day
+  const day = ymd(now), isFri = now.getDay() === 5;
+  const [kept, setKept] = useState<{ date: string; q: Quote } | null | undefined>(undefined);
+  // eslint-disable-next-line react-hooks/set-state-in-effect -- localStorage is only readable after mount
+  useEffect(() => { try { setKept(JSON.parse(localStorage.getItem(FRIDAY_KEY) || "null")); } catch { setKept(null); } }, []);
+  const keptQ = kept?.date === day ? kept.q : null;
+  const fr = useApi<{ friday_quote?: Quote | null }>(isFri && kept !== undefined && !keptQ ? `/content/friday-quotes/today?date=${day}` : null);
+  const fetched = fr.data?.friday_quote;
+  useEffect(() => { if (fetched) try { localStorage.setItem(FRIDAY_KEY, JSON.stringify({ date: day, q: fetched })); } catch {} }, [fetched, day]);
+  const daily = items<Quote>(useApi<unknown>(`/content/daily-quotes?page=1&limit=1&date=${day}`).data, "daily_quotes")[0];
+  // on Fridays wait for the Friday answer before falling back, so the daily quote never flashes first
+  const fridayDone = !isFri || !!keptQ || (kept !== undefined && !fr.loading);
+  const quote = keptQ || fetched || (fridayDone ? daily : undefined);
   const quoteText = quote && pick(lang, quote)?.trim();
 
   return (
