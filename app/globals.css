@@ -377,7 +377,7 @@ html[data-theme="light"] .shimmer { background: linear-gradient(90deg, rgba(21, 
 html[data-theme="light"] .medal svg { fill: rgba(166, 196, 32, 0.12); }
 html[data-theme="light"] .tile { box-shadow: var(--lift); }
 /* light art: pale sage paper, olive shapes, warm gold; the title sits on a white fade */
-html[data-theme="light"] { --art-bg1: #e4ebcc; --art-bg2: #c3d293; --art-l: #5f7d06; --art-ll: #86a516; --art-s: #d99400; --art-d: #f3f6e6; }
+html[data-theme="light"] { --art-bg1: #e4ebcc; --art-bg2: #c3d293; --art-l: #4b6602; --art-ll: #6c8b0d; --art-s: #c78400; --art-d: #f3f6e6; }
 html[data-theme="light"] .tile::after { background: linear-gradient(180deg, rgba(243, 246, 230, 0) 60%, rgba(243, 246, 230, 0.85) 100%); }
 html[data-theme="light"] .tile-label .display { color: var(--ivory); text-shadow: none; }
 html[data-theme="light"] .tile-label small { color: var(--muted); }
