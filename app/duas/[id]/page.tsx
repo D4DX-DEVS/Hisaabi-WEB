@@ -19,9 +19,13 @@ type Dua = { _id?: string; id?: string; title?: string; title_malayalam?: string
 
 function Body({ id }: { id: string }) {
   const { lang } = useLang();
-  const subs = useApi<unknown>(`/content/dua-categories?parent=${id}&page=1&limit=50`);
+  // the backend ignores ?parent=, so take the full list (the same one /duas loads) and keep this category's children
+  const subs = useApi<unknown>("/content/dua-categories?page=1&limit=200");
   const duas = useApi<unknown>(`/content/duas?category=${id}&page=1&limit=50`);
-  const sc = items<Cat>(subs.data, "dua_categories");
+  const sc = items<Cat>(subs.data, "dua_categories").filter((c) => {
+    const p = c.parent as string | { _id?: string; id?: string } | null | undefined;
+    return (typeof p === "object" && p ? p._id ?? p.id : p) === id;
+  });
   const dl = items<Dua>(duas.data, "duas");
   return (
     <>
