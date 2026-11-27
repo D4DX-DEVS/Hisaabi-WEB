@@ -5,7 +5,7 @@ import { Fragment, Suspense, useEffect, useState, useSyncExternalStore } from "r
 import PwaBoot from "./PwaBoot";
 import { MotionConfig, motion } from "framer-motion";
 import {
-  Bot, BookOpen, BookText, Flower2, Lightbulb, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, PanelLeftClose, PanelLeftOpen, Info, Mail, ShieldCheck, HandHeart, LayoutGrid, X,
+  Bot, BookOpen, BookText, Flower2, Lightbulb, CircleDot, Clock, Home, Library, Moon, Quote, Scroll, Sparkles, Settings as Cog, Star, UserRound, MessageSquare, Heart, ChevronLeft, ChevronRight, Info, Mail, ShieldCheck, HandHeart, LayoutGrid, X,
   type LucideIcon,
 } from "lucide-react";
 
@@ -116,11 +116,12 @@ export default function Shell({ children }: { children: React.ReactNode }) {
           <div className="rail-head">
             {/* eslint-disable-next-line @next/next/no-img-element */}
             <Link href="/" aria-label="Hisaabi home"><img className="logo when-dark" src="/img/Hisaabi-grn.png" alt="Hisaabi" /><img className="logo when-light" src="/img/Hisaabi-drk.png" alt="Hisaabi" /><img className="logo-mini" src="/img/hisaabi_round.png" alt="Hisaabi" /></Link>
-            <button type="button" className="rail-toggle" onClick={toggleRail} aria-label={mini ? "Expand sidebar" : "Collapse sidebar"} title={mini ? "Expand sidebar" : "Collapse sidebar"}>{mini ? <PanelLeftOpen size={18} /> : <PanelLeftClose size={18} />}</button>
           </div>
           <Support className="support" />
           <Suspense fallback={null}><NavLinks /></Suspense>
         </nav>
+        {/* sits on the sidebar's edge, outside it, so the scrolling sidebar can't clip it */}
+        <button type="button" className={"rail-toggle" + (mini ? " mini" : "")} onClick={toggleRail} aria-label={mini ? "Expand sidebar" : "Collapse sidebar"} title={mini ? "Expand sidebar" : "Collapse sidebar"}>{mini ? <ChevronRight size={16} /> : <ChevronLeft size={16} />}</button>
         <main className="main">
           <div className="page">
             <div className="topbar">
