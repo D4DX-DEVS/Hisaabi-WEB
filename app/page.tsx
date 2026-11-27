@@ -11,6 +11,7 @@ import { SECTION_SCENE } from "@/lib/images";
 import { GROUPS } from "@/components/Shell";
 import { dayView, usePrayerSettings } from "@/lib/prayer";
 import { items, useApi } from "@/lib/api";
+import { useAuth } from "@/lib/auth";
 import { pick, useLang } from "@/lib/lang";
 
 const hijri = (d: Date) => new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", { day: "numeric", month: "long", year: "numeric" }).format(d);
@@ -19,6 +20,7 @@ const hijri = (d: Date) => new Intl.DateTimeFormat("en-u-ca-islamic-umalqura", {
 const introSeen = () => { try { return sessionStorage.getItem("hisaabi.intro") === "1"; } catch { return true; } };
 const GREETING = "Assalamu alaikum";
 type Quote = { text?: string; english?: string; malayalam?: string; urdu?: string };
+const RISE = { hide: { opacity: 0, y: 14, filter: "blur(6px)" }, show: { opacity: 1, y: 0, filter: "blur(0px)", transition: { duration: 0.7, ease: [0.22, 1, 0.36, 1] as const } } };
 const FRIDAY_KEY = "hisaabi.fridayQuote";
 const ymd = (d: Date) => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 
@@ -44,11 +46,15 @@ export default function Home() {
   const fr = useApi<{ friday_quote?: Quote | null }>(isFri && kept !== undefined && !keptQ ? `/content/friday-quotes/today?date=${day}` : null);
   const fetched = fr.data?.friday_quote;
   useEffect(() => { if (fetched) try { localStorage.setItem(FRIDAY_KEY, JSON.stringify({ date: day, q: fetched })); } catch {} }, [fetched, day]);
-  const daily = items<Quote>(useApi<unknown>(`/content/daily-quotes?page=1&limit=1&date=${day}`).data, "daily_quotes")[0];
+  const dq = useApi<unknown>(`/content/daily-quotes?page=1&limit=1&date=${day}`);
+  const daily = items<Quote>(dq.data, "daily_quotes")[0];
   // on Fridays wait for the Friday answer before falling back, so the daily quote never flashes first
   const fridayDone = !isFri || !!keptQ || (kept !== undefined && !fr.loading);
   const quote = keptQ || fetched || (fridayDone ? daily : undefined);
   const quoteText = quote && pick(lang, quote)?.trim();
+  // signed in: hold the space until the quote arrives instead of flashing the greeting first
+  const { token } = useAuth();
+  const waiting = !!token && !quoteText && (!fridayDone || dq.loading);
 
   return (
     <>
@@ -59,12 +65,12 @@ export default function Home() {
         <Link href="/settings" className="icon-btn" aria-label="Settings" title="Settings"><Cog size={18} aria-hidden /></Link>
       </div>
       <section style={{ display: "grid", gap: 40, gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))", alignItems: "center", marginBottom: 56 }}>
-        {quote && quoteText ? (
-          <div>
-            <p className="muted" style={{ marginBottom: 18 }}><span className="gold">Today&apos;s quote</span> · {now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
-            {quote.text && <p className="ar" style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.75rem)", lineHeight: 2.1, color: "var(--gold)", textAlign: "left", whiteSpace: "pre-line" }}>{quote.text.trim()}</p>}
-            <p className={"display" + (lang === "urdu" ? " ur" : "")} dir={lang === "urdu" ? "rtl" : undefined} style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.8rem)", lineHeight: lang === "urdu" ? 2.2 : 1.3, color: "var(--ivory)", marginTop: 18 }}>{quoteText}</p>
-          </div>
+        {waiting ? <div style={{ minHeight: 300 }} aria-busy="true" /> : quote && quoteText ? (
+          <motion.div initial="hide" animate="show" variants={{ show: { transition: { staggerChildren: 0.18 } } }}>
+            <motion.p variants={RISE} className="muted" style={{ marginBottom: 18 }}><span className="gold">Today&apos;s quote</span> · {now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</motion.p>
+            {quote.text && <motion.p variants={RISE} className="ar" style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.75rem)", lineHeight: 2.1, color: "var(--gold)", textAlign: "left", whiteSpace: "pre-line" }}>{quote.text.trim()}</motion.p>}
+            <motion.p variants={RISE} className={"display" + (lang === "urdu" ? " ur" : "")} dir={lang === "urdu" ? "rtl" : undefined} style={{ fontSize: "clamp(1.3rem, 1.9vw, 1.8rem)", lineHeight: lang === "urdu" ? 2.2 : 1.3, color: "var(--ivory)", marginTop: 18 }}>{quoteText}</motion.p>
+          </motion.div>
         ) : (
           <div>
             <p className="muted" style={{ marginBottom: 14 }}>{now.toLocaleDateString(undefined, { weekday: "long", day: "numeric", month: "long" })} · {hijri(now)}</p>
